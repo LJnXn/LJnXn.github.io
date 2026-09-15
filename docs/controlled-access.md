@@ -13,8 +13,9 @@ links directly to the existing control-hub Tailscale Serve listener.
    requested Read, Triage, or Write permission.
 3. The approved visitor opens the login endpoint and authenticates with
    GitHub OAuth.
-4. The proxy authorizes the GitHub identity and forwards the user directly to
-   the complete Raspberry Pi control hub.
+4. The proxy authorizes the GitHub identity and displays a landing page with
+   the complete Raspberry Pi control hub and private repositories visible to
+   that GitHub account.
 
 ## Network boundary
 
@@ -23,7 +24,7 @@ loopback-only authenticated gateway. Keep the existing `443` Serve listener
 tailnet-only because it currently fronts the complete control hub.
 
 ```text
-Internet -> Tailscale Funnel :8443 -> GitHub OAuth proxy -> allowlist -> complete control hub
+Internet -> Tailscale Funnel :8443 -> GitHub OAuth proxy -> allowlist -> landing page
 Tailnet  -> Tailscale Serve  :443  -> complete control hub
 ```
 

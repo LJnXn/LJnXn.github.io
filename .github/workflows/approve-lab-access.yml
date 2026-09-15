@@ -1,0 +1,68 @@
+name: Approve lab access
+
+on:
+  issues:
+    types: [labeled]
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  approve:
+    if: >-
+      github.event.label.name == 'approved' &&
+      contains(github.event.issue.labels.*.name, 'access-request')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Update Raspberry Pi allowlist
+        uses: actions/github-script@v8
+        env:
+          APPROVAL_WEBHOOK_SECRET: ${{ secrets.APPROVAL_WEBHOOK_SECRET }}
+          APPROVAL_WEBHOOK_URL: ${{ vars.APPROVAL_WEBHOOK_URL }}
+        with:
+          script: |
+            const crypto = require('crypto');
+            const issue = context.payload.issue;
+            const match = issue.body.match(/### GitHub 用户名\s*\r?\n+\s*([^\r\n]+)/);
+            if (!match) core.setFailed('申请中没有找到 GitHub 用户名');
+            const username = match?.[1]?.trim() ?? '';
+            if (!/^[A-Za-z0-9](?:[A-Za-z0-9-]{0,38})$/.test(username)) {
+              core.setFailed('GitHub 用户名格式无效');
+              return;
+            }
+            const url = process.env.APPROVAL_WEBHOOK_URL;
+            const secret = process.env.APPROVAL_WEBHOOK_SECRET;
+            if (!url || !secret) {
+              core.setFailed('审批 Webhook 尚未配置');
+              return;
+            }
+            const payload = JSON.stringify({
+              action: 'approve',
+              repository: context.payload.repository.full_name,
+              issue_number: issue.number,
+              username,
+            });
+            const signature = 'sha256=' + crypto.createHmac('sha256', secret).update(payload).digest('hex');
+            const response = await fetch(url, {
+              method: 'POST',
+              headers: {'content-type': 'application/json', 'x-lab-signature': signature},
+              body: payload,
+            });
+            if (!response.ok) {
+              core.setFailed(`树莓派拒绝审批请求：HTTP ${response.status}`);
+              return;
+            }
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue.number,
+              body: `已批准 GitHub 用户 \`${username}\` 访问实验室合作者入口。`,
+            });
+            await github.rest.issues.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue.number,
+              state: 'closed',
+              state_reason: 'completed',
+            });

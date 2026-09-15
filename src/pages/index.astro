@@ -1,5 +1,5 @@
 ---
-import { ArrowRight, GitPullRequest, LogIn, UserRoundCheck } from "@lucide/astro";
+import { ArrowRight, GitPullRequest, LogIn } from "@lucide/astro";
 import { getCollection } from "astro:content";
 import Base from "../layouts/Base.astro";
 import GithubMark from "../components/GithubMark.astro";
@@ -38,9 +38,8 @@ const projects = [
     </div></section>
 
     <section class="band" id="access"><div class="shell private-band">
-      <div><div class="eyebrow">Controlled Access</div><h2>实验室入口</h2><p>Tailscale Funnel 只发布独立的受限入口。新用户先提交 GitHub 账号申请；批准后使用 GitHub 登录。公开主页不会暴露控制中枢、NAS、Cockpit 或 WebDAV。</p></div>
+      <div><div class="eyebrow">Controlled Access</div><h2>实验室入口</h2><p>Tailscale Funnel 只发布独立的受限入口。新用户提交合作者申请；批准后可使用 GitHub 登录并访问获邀项目。公开主页不会暴露控制中枢、NAS、Cockpit 或 WebDAV。</p></div>
       <div class="actions">
-        <a class="button" href="https://github.com/LJnXn/LJnXn.github.io/issues/new?template=access.yml" target="_blank" rel="noreferrer"><UserRoundCheck size={17} /> 申请访问</a>
         <a class="button" href="https://github.com/LJnXn/LJnXn.github.io/issues/new?template=collaborator.yml" target="_blank" rel="noreferrer"><GitPullRequest size={17} /> 申请成为合作者</a>
         {labAccessUrl ? <a class="button primary" href={labAccessUrl} rel="noreferrer"><LogIn size={17} /> 已批准用户登录</a> : <span class="button" aria-disabled="true"><LogIn size={17} /> 登录入口配置中</span>}
       </div>

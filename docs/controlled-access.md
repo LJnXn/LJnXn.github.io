@@ -5,10 +5,11 @@ links directly to the existing control-hub Tailscale Serve listener.
 
 ## Request and login flow
 
-1. A visitor submits their GitHub username through the public access-request
-   issue form.
-2. The administrator reviews the request and adds the username to the OAuth
-   proxy allowlist.
+1. A visitor submits the collaborator issue form with their GitHub username,
+   requested private project, and minimum repository permission.
+2. The administrator reviews the request. Approval adds the username to the
+   OAuth proxy allowlist; the repository invitation remains an explicit owner
+   action with the requested Read, Triage, or Write permission.
 3. The approved visitor opens the login endpoint and authenticates with
    GitHub OAuth.
 4. The proxy authorizes the GitHub identity before forwarding to the limited
@@ -30,7 +31,6 @@ enable it until the OAuth proxy rejects users outside the explicit allowlist.
 
 ## Repository collaboration
 
-Repository collaboration is a separate approval path. A lab-access approval
-never grants repository access. Collaborator requests use the public issue
-form, after which the repository owner selects the repository and minimum
-GitHub permission manually. No workflow automatically invites applicants.
+There is no separate lab-access request. An approved collaborator inherits the
+basic authenticated landing page, while GitHub independently enforces access
+to each private repository. No workflow automatically invites applicants.

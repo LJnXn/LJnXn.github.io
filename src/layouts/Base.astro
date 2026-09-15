@@ -4,6 +4,7 @@ import "../styles/global.css";
 
 interface Props { title?: string; description?: string; }
 const { title = "mopango · 工程与研究", description = "通信、FPGA、Linux 与实验系统的工程记录。" } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
 ---
 <!doctype html>
 <html lang="zh-CN">
@@ -11,6 +12,14 @@ const { title = "mopango · 工程与研究", description = "通信、FPGA、Lin
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL("/profile.jpg", Astro.site)} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="alternate" type="application/rss+xml" title="mopango 的公开文章" href="/rss.xml" />
     <meta name="generator" content={Astro.generator} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <title>{title}</title>
@@ -20,7 +29,7 @@ const { title = "mopango · 工程与研究", description = "通信、FPGA、Lin
       <nav class="shell nav" aria-label="主导航">
         <a class="brand" href="/">MOPANGO / LJnXn</a>
         <div class="nav-links">
-          <a href="/#projects">项目</a><a href="/#writing">文章</a>
+          <a href="/#projects">项目</a><a href="/blog/">文章</a>
           <a class="icon-link" href="https://github.com/LJnXn" target="_blank" rel="noreferrer" aria-label="GitHub" title="GitHub"><GithubMark size={18} /></a>
         </div>
       </nav>

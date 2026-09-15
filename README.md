@@ -16,3 +16,7 @@ private-content directories before building.
 
 Pushes to `main` deploy through GitHub Pages. Enable Pages with **GitHub
 Actions** as its source in repository settings after the first push.
+
+The private publishing boundary is documented in
+`docs/private-publishing.md`. It stays disabled until a Cloudflare-managed
+hostname and Access policy are available.

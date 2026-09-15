@@ -1,0 +1,59 @@
+name: 申请成为项目合作者
+description: 申请参与指定项目。提交申请不会自动获得私有仓库权限，所有邀请均由仓库所有者审核。
+title: "[Collaborator] "
+labels: ["collaborator-request"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        请只填写可公开的信息。不要提交密码、令牌、设备地址、私有代码或未公开实验数据。
+  - type: input
+    id: github-user
+    attributes:
+      label: GitHub 用户名
+      description: 仓库邀请只会发送给这个 GitHub 账号。
+      placeholder: octocat
+    validations:
+      required: true
+  - type: dropdown
+    id: repository
+    attributes:
+      label: 希望参与的项目
+      options:
+        - ISAC PL / PS / PC
+        - Tiny NPU
+        - Raspberry Pi Lab Hub
+        - 其他公开项目
+    validations:
+      required: true
+  - type: dropdown
+    id: permission
+    attributes:
+      label: 建议权限
+      description: 最终权限由仓库所有者按照实际任务决定。
+      options:
+        - Read（查看）
+        - Triage（管理 Issue 与 PR）
+        - Write（提交分支与代码）
+    validations:
+      required: true
+  - type: textarea
+    id: contribution
+    attributes:
+      label: 计划贡献
+      description: 说明准备解决的问题、可投入的工作以及相关经验。
+    validations:
+      required: true
+  - type: input
+    id: references
+    attributes:
+      label: 相关资料
+      description: 可填写个人主页、公开仓库或相关 Issue/PR 链接。
+      placeholder: https://github.com/username/project
+  - type: checkboxes
+    id: agreement
+    attributes:
+      label: 协作约束
+      options:
+        - label: 我理解申请需要人工审核，且获批后仍应遵守仓库安全与保密要求。
+          required: true

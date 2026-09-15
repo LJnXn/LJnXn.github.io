@@ -27,3 +27,10 @@ Tailnet  -> Tailscale Serve  :443  -> complete control hub
 
 Funnel provides public TLS and forwarding, not identity verification. Never
 enable it until the OAuth proxy rejects users outside the explicit allowlist.
+
+## Repository collaboration
+
+Repository collaboration is a separate approval path. A lab-access approval
+never grants repository access. Collaborator requests use the public issue
+form, after which the repository owner selects the repository and minimum
+GitHub permission manually. No workflow automatically invites applicants.

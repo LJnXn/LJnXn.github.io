@@ -1,0 +1,16 @@
+{
+  "name": "ljnxn-personal-site",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.4",
+    "astro": "^7.3.2",
+    "@lucide/astro": "^1.46.0",
+    "typescript": "^5.7.2"
+  }
+}

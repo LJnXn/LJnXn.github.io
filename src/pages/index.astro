@@ -1,0 +1,45 @@
+---
+import { ArrowRight, LockKeyhole } from "@lucide/astro";
+import { getCollection } from "astro:content";
+import Base from "../layouts/Base.astro";
+import GithubMark from "../components/GithubMark.astro";
+
+const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort((a, b) => b.data.published.valueOf() - a.data.published.valueOf()).slice(0, 3);
+const privateBlogUrl = import.meta.env.PUBLIC_PRIVATE_BLOG_URL;
+const projects = [
+  { name: "ISAC PL / PS / PC", type: "通信系统", text: "面向 Zynq 的一体化感知通信实验链路与可重复构建流程。" },
+  { name: "Tiny NPU", type: "FPGA", text: "以 Zynq-7020 为起点，记录神经网络加速器从结构到实现的学习过程。" },
+  { name: "Lab Hub", type: "基础设施", text: "树莓派驱动的隔离实验网络、设备电源、NAS 与远程管理中枢。" },
+];
+---
+<Base>
+  <main>
+    <section class="hero">
+      <img class="hero-image" src="/profile.jpg" alt="mopango 的个人头像" width="1200" height="1200" fetchpriority="high" />
+      <div class="shell hero-inner">
+        <div class="eyebrow">Chengdu · Engineering Notes</div>
+        <h1>把复杂系统，做成可以验证的东西。</h1>
+        <p class="lede">我是 mopango。这里记录通信、FPGA、Linux 与实验基础设施，也保存那些从失败里长出来的工程判断。</p>
+        <div class="actions">
+          <a class="button primary" href="#writing">阅读文章 <ArrowRight size={17} /></a>
+          <a class="button" href="https://github.com/LJnXn" target="_blank" rel="noreferrer"><GithubMark size={17} /> GitHub</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" id="projects"><div class="shell">
+      <div class="section-head"><div><div class="eyebrow">Selected Work</div><h2>正在构建</h2></div><p>项目不只是结果，也包括环境、约束、测量方式和可复现过程。</p></div>
+      <div class="project-grid">{projects.map((project) => <article class="project"><div class="meta">{project.type}</div><h3>{project.name}</h3><p>{project.text}</p></article>)}</div>
+    </div></section>
+
+    <section class="band" id="writing"><div class="shell">
+      <div class="section-head"><div><div class="eyebrow">Public Notes</div><h2>公开文章</h2></div><p>研究札记、调试记录和能被复用的方法。</p></div>
+      <div class="post-grid">{posts.map((post) => <a class="post" href={`/blog/${post.id}/`}><div class="meta"><time datetime={post.data.published.toISOString()}>{post.data.published.toLocaleDateString("zh-CN")}</time></div><h3>{post.data.title}</h3><p>{post.data.description}</p></a>)}</div>
+    </div></section>
+
+    <section class="band"><div class="shell private-band">
+      <div><div class="eyebrow">Private Archive</div><h2>私密博客</h2><p>未公开的实验记录、阶段性材料和个人笔记保存在独立服务中。访问时由 Cloudflare Access 验证身份，内容不会进入 GitHub Pages 构建产物。</p></div>
+      {privateBlogUrl ? <a class="button" href={privateBlogUrl} rel="noreferrer"><LockKeyhole size={17} /> 身份验证后访问</a> : <span class="button" aria-disabled="true"><LockKeyhole size={17} /> 尚未启用</span>}
+    </div></section>
+  </main>
+</Base>

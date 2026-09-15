@@ -1,15 +1,15 @@
 ---
-import { ArrowRight, LockKeyhole } from "@lucide/astro";
+import { ArrowRight, ExternalLink, LogIn, UserRoundCheck } from "@lucide/astro";
 import { getCollection } from "astro:content";
 import Base from "../layouts/Base.astro";
 import GithubMark from "../components/GithubMark.astro";
 
 const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort((a, b) => b.data.published.valueOf() - a.data.published.valueOf()).slice(0, 3);
-const privateBlogUrl = import.meta.env.PUBLIC_PRIVATE_BLOG_URL;
+const labAccessUrl = import.meta.env.PUBLIC_LAB_ACCESS_URL;
 const projects = [
-  { name: "ISAC PL / PS / PC", type: "通信系统", text: "面向 Zynq 的一体化感知通信实验链路与可重复构建流程。" },
-  { name: "Tiny NPU", type: "FPGA", text: "以 Zynq-7020 为起点，记录神经网络加速器从结构到实现的学习过程。" },
-  { name: "Lab Hub", type: "基础设施", text: "树莓派驱动的隔离实验网络、设备电源、NAS 与远程管理中枢。" },
+  { name: "MyTinySTL", type: "C++", text: "以 C++11 实现一个紧凑的 STL，用于理解容器、迭代器和泛型设计。", url: "https://github.com/LJnXn/MyTinySTL" },
+  { name: "Tinyhttpd", type: "网络", text: "通过小型 HTTP Server 理解请求解析、CGI 与服务器程序的基本结构。", url: "https://github.com/LJnXn/Tinyhttpd" },
+  { name: "ISAC / Tiny NPU / Lab Hub", type: "整理中", text: "正在从私有工程中抽取不含凭据、实验数据和内网细节的可公开部分。" },
 ];
 ---
 <Base>
@@ -29,7 +29,7 @@ const projects = [
 
     <section class="band" id="projects"><div class="shell">
       <div class="section-head"><div><div class="eyebrow">Selected Work</div><h2>正在构建</h2></div><p>项目不只是结果，也包括环境、约束、测量方式和可复现过程。</p></div>
-      <div class="project-grid">{projects.map((project) => <article class="project"><div class="meta">{project.type}</div><h3>{project.name}</h3><p>{project.text}</p></article>)}</div>
+      <div class="project-grid">{projects.map((project) => project.url ? <a class="project" href={project.url} target="_blank" rel="noreferrer"><div class="meta">{project.type} <ExternalLink size={13} /></div><h3>{project.name}</h3><p>{project.text}</p></a> : <article class="project"><div class="meta">{project.type}</div><h3>{project.name}</h3><p>{project.text}</p></article>)}</div>
     </div></section>
 
     <section class="band" id="writing"><div class="shell">
@@ -37,9 +37,12 @@ const projects = [
       <div class="post-grid">{posts.map((post) => <a class="post" href={`/blog/${post.id}/`}><div class="meta"><time datetime={post.data.published.toISOString()}>{post.data.published.toLocaleDateString("zh-CN")}</time></div><h3>{post.data.title}</h3><p>{post.data.description}</p></a>)}</div>
     </div></section>
 
-    <section class="band"><div class="shell private-band">
-      <div><div class="eyebrow">Private Archive</div><h2>私密博客</h2><p>未公开的实验记录、阶段性材料和个人笔记保存在独立服务中。访问时由 Cloudflare Access 验证身份，内容不会进入 GitHub Pages 构建产物。</p></div>
-      {privateBlogUrl ? <a class="button" href={privateBlogUrl} rel="noreferrer"><LockKeyhole size={17} /> 身份验证后访问</a> : <span class="button" aria-disabled="true"><LockKeyhole size={17} /> 尚未启用</span>}
+    <section class="band" id="access"><div class="shell private-band">
+      <div><div class="eyebrow">Controlled Access</div><h2>实验室入口</h2><p>Tailscale Funnel 只发布独立的受限入口。新用户先提交 GitHub 账号申请；批准后使用 GitHub 登录。公开主页不会暴露控制中枢、NAS、Cockpit 或 WebDAV。</p></div>
+      <div class="actions">
+        <a class="button" href="https://github.com/LJnXn/LJnXn.github.io/issues/new?template=access.yml" target="_blank" rel="noreferrer"><UserRoundCheck size={17} /> 申请访问</a>
+        {labAccessUrl ? <a class="button primary" href={labAccessUrl} rel="noreferrer"><LogIn size={17} /> 已批准用户登录</a> : <span class="button" aria-disabled="true"><LogIn size={17} /> 登录入口配置中</span>}
+      </div>
     </div></section>
   </main>
 </Base>

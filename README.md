@@ -9,14 +9,13 @@ npm install
 npm run dev
 ```
 
-Public posts live in `src/content/blog`. Set `PUBLIC_PRIVATE_BLOG_URL` only to
-the Cloudflare Access protected private-blog origin. Private post bodies must
-never be placed in this repository; the public workflow rejects conventional
-private-content directories before building.
+Public posts live in `src/content/blog`. Set `PUBLIC_LAB_ACCESS_URL` only after
+the dedicated Tailscale Funnel endpoint has an authentication proxy in front
+of it. Never point this variable at the existing control-hub Serve endpoint.
 
 Pushes to `main` deploy through GitHub Pages. Enable Pages with **GitHub
 Actions** as its source in repository settings after the first push.
 
-The private publishing boundary is documented in
-`docs/private-publishing.md`. It stays disabled until a Cloudflare-managed
-hostname and Access policy are available.
+The controlled-access boundary is documented in `docs/controlled-access.md`.
+Funnel is not an identity provider; the public URL stays disabled until the
+GitHub OAuth allowlist is enforced at the origin.

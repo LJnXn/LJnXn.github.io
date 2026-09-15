@@ -15,7 +15,7 @@ const projects = [
 <Base>
   <main>
     <section class="hero">
-      <img class="hero-image" src="/hero-wuhan.webp" alt="武汉夜色中写有祝福的玻璃与城市灯光" width="2400" height="1600" fetchpriority="high" />
+      <img class="hero-image" src="/hero-portrait.webp" alt="晚霞与城市天际线前的人物背影" width="2400" height="1600" fetchpriority="high" />
       <div class="shell hero-inner">
         <div class="eyebrow">Chengdu · Engineering Notes</div>
         <h1>把复杂系统，做成可以验证的东西。</h1>
@@ -45,5 +45,10 @@ const projects = [
         {labAccessUrl ? <a class="button primary" href={labAccessUrl} rel="noreferrer"><LogIn size={17} /> 已批准用户登录</a> : <span class="button" aria-disabled="true"><LogIn size={17} /> 登录入口配置中</span>}
       </div>
     </div></section>
+
+    <figure class="closing-photo">
+      <img src="/hero-wuhan.webp" alt="武汉夜色中写有祝福的玻璃与城市灯光" width="2400" height="1600" loading="lazy" />
+      <figcaption class="shell"><span>Wuhan · 2026</span></figcaption>
+    </figure>
   </main>
 </Base>

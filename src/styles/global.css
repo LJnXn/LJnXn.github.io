@@ -62,6 +62,13 @@ section.band { padding-block: 80px; border-bottom: 1px solid var(--line); }
 .prose h2 { margin-top: 42px; font-size: 26px; }
 .prose code { color: var(--signal); }
 .prose a { color: var(--blue); }
+.prose .katex { color: var(--ink); font-size: 1.05em; }
+.prose .katex-display { margin: 1.6rem 0; padding: 14px 0; overflow-x: auto; overflow-y: hidden; }
+.prose .katex-display > .katex { min-width: max-content; text-align: center; }
+.prose .katex-display::-webkit-scrollbar { height: 7px; }
+.prose .katex-display::-webkit-scrollbar-thumb { background: var(--line); }
+.prose :not(.katex-display) > .katex { white-space: normal; }
+.prose .katex .base { white-space: nowrap; }
 .comments { margin-top: 72px; padding-top: 32px; border-top: 1px solid var(--line); }
 .comments h2 { margin: 8px 0 24px; font-size: 26px; }
 .archive { padding-block: 72px 110px; min-height: calc(100vh - 140px); }
@@ -87,6 +94,8 @@ section.band { padding-block: 80px; border-bottom: 1px solid var(--line); }
   .hero-inner { padding-block: 80px 72px; }
   h1 { font-size: 48px; }
   .article h1 { font-size: 42px; }
+  .prose .katex { font-size: .98em; }
+  .prose .katex-display { margin-inline: -6px; padding-inline: 6px; }
   .comments { margin-top: 54px; }
   .archive-intro h1 { font-size: 44px; }
   .archive-row { grid-template-columns: 1fr; gap: 8px; }

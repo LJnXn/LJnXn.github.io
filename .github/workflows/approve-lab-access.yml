@@ -1,4 +1,4 @@
-name: Approve lab access
+name: Manage collaborator access
 
 on:
   issues:
@@ -9,19 +9,20 @@ permissions:
   issues: write
 
 jobs:
-  approve:
+  update-access:
     if: >-
-      github.event.label.name == 'approved' &&
+      (github.event.label.name == 'approved' || github.event.label.name == 'revoked') &&
       contains(github.event.issue.labels.*.name, 'collaborator-request') &&
       github.actor == github.repository_owner
     runs-on: ubuntu-latest
     steps:
-      - name: Update Raspberry Pi allowlist
+      - name: Update Raspberry Pi and all private repositories
         uses: actions/github-script@v8
         env:
           APPROVAL_WEBHOOK_SECRET: ${{ secrets.APPROVAL_WEBHOOK_SECRET }}
           APPROVAL_WEBHOOK_URL: ${{ vars.APPROVAL_WEBHOOK_URL }}
         with:
+          github-token: ${{ secrets.COLLABORATOR_ADMIN_TOKEN }}
           script: |
             const crypto = require('crypto');
             const issue = context.payload.issue;
@@ -38,27 +39,83 @@ jobs:
               core.setFailed('审批 Webhook 尚未配置');
               return;
             }
+            const action = context.payload.label.name === 'approved' ? 'approve' : 'revoke';
             const payload = JSON.stringify({
-              action: 'approve',
+              action,
               repository: context.payload.repository.full_name,
               issue_number: issue.number,
               username,
             });
             const signature = 'sha256=' + crypto.createHmac('sha256', secret).update(payload).digest('hex');
-            const response = await fetch(url, {
-              method: 'POST',
-              headers: {'content-type': 'application/json', 'x-lab-signature': signature},
-              body: payload,
-            });
-            if (!response.ok) {
-              core.setFailed(`树莓派拒绝审批请求：HTTP ${response.status}`);
+
+            async function updateGateway() {
+              const response = await fetch(url, {
+                method: 'POST',
+                headers: {'content-type': 'application/json', 'x-lab-signature': signature},
+                body: payload,
+              });
+              if (!response.ok) throw new Error(`树莓派拒绝请求：HTTP ${response.status}`);
+            }
+
+            const repositories = (await github.paginate(
+              github.rest.repos.listForAuthenticatedUser,
+              {visibility: 'private', affiliation: 'owner', per_page: 100},
+            )).filter(repo =>
+              repo.owner.login.toLowerCase() === context.repo.owner.toLowerCase() && !repo.archived
+            );
+
+            if (action === 'revoke') await updateGateway();
+
+            const failures = [];
+            if (username.toLowerCase() !== context.repo.owner.toLowerCase()) {
+              for (const repository of repositories) {
+                try {
+                  if (action === 'approve') {
+                    await github.rest.repos.addCollaborator({
+                      owner: context.repo.owner,
+                      repo: repository.name,
+                      username,
+                      permission: 'pull',
+                    });
+                  } else {
+                    await github.rest.repos.removeCollaborator({
+                      owner: context.repo.owner,
+                      repo: repository.name,
+                      username,
+                    });
+                  }
+                } catch (error) {
+                  if (!(action === 'revoke' && error.status === 404)) {
+                    failures.push(`${repository.name}: ${error.message}`);
+                  }
+                }
+              }
+            }
+
+            if (failures.length) {
+              core.setFailed(`仓库权限更新失败：${failures.join('; ')}`);
               return;
             }
+            if (action === 'approve') await updateGateway();
+
+            const oppositeLabel = action === 'approve' ? 'revoked' : 'approved';
+            try {
+              await github.rest.issues.removeLabel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                name: oppositeLabel,
+              });
+            } catch (error) {
+              if (error.status !== 404) throw error;
+            }
+
+            const verb = action === 'approve' ? '已批准' : '已撤销';
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: issue.number,
-              body: `已批准 GitHub 用户 \`${username}\` 成为合作者，并开通基础实验室入口。`,
+              body: `${verb} GitHub 用户 \`${username}\` 的树莓派入口和全部私有仓库权限。`,
             });
             await github.rest.issues.update({
               owner: context.repo.owner,

@@ -1,5 +1,5 @@
-name: 申请成为项目合作者
-description: 申请参与指定项目。提交申请不会自动获得私有仓库权限，所有邀请均由仓库所有者审核。
+name: 申请成为合作者
+description: 获批后可登录树莓派，并获得当前全部私有仓库的只读权限。
 title: "[Collaborator] "
 labels: ["collaborator-request"]
 body:
@@ -13,28 +13,6 @@ body:
       label: GitHub 用户名
       description: 仓库邀请只会发送给这个 GitHub 账号。
       placeholder: octocat
-    validations:
-      required: true
-  - type: dropdown
-    id: repository
-    attributes:
-      label: 希望参与的项目
-      options:
-        - ISAC PL / PS / PC
-        - Tiny NPU
-        - Raspberry Pi Lab Hub
-        - 其他公开项目
-    validations:
-      required: true
-  - type: dropdown
-    id: permission
-    attributes:
-      label: 建议权限
-      description: 最终权限由仓库所有者按照实际任务决定。
-      options:
-        - Read（查看）
-        - Triage（管理 Issue 与 PR）
-        - Write（提交分支与代码）
     validations:
       required: true
   - type: textarea
@@ -55,5 +33,5 @@ body:
     attributes:
       label: 协作约束
       options:
-        - label: 我理解申请需要人工审核，且获批后仍应遵守仓库安全与保密要求。
+        - label: 我理解申请需要人工审核；获批后可访问树莓派和全部私有仓库，并应遵守安全与保密要求。
           required: true

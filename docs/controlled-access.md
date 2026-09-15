@@ -7,13 +7,14 @@ links directly to the existing control-hub Tailscale Serve listener.
 
 1. A visitor submits the collaborator issue form with their GitHub username,
    requested private project, and minimum repository permission.
-2. The administrator reviews the request. Approval adds the username to the
-   OAuth proxy allowlist; the repository invitation remains an explicit owner
-   action with the requested Read, Triage, or Write permission.
+2. The repository owner reviews the request. Only a label added by the owner
+   can trigger approval. Approval adds the username to the gateway allowlist;
+   the repository invitation remains an explicit owner action with the
+   requested Read, Triage, or Write permission.
 3. The approved visitor opens the login endpoint and authenticates with
    GitHub OAuth.
-4. The proxy authorizes the GitHub identity before forwarding to the limited
-   lab application.
+4. The proxy authorizes the GitHub identity and forwards the user directly to
+   the complete Raspberry Pi control hub.
 
 ## Network boundary
 
@@ -22,7 +23,7 @@ loopback-only authenticated gateway. Keep the existing `443` Serve listener
 tailnet-only because it currently fronts the complete control hub.
 
 ```text
-Internet -> Tailscale Funnel :8443 -> GitHub OAuth proxy -> limited gateway
+Internet -> Tailscale Funnel :8443 -> GitHub OAuth proxy -> allowlist -> complete control hub
 Tailnet  -> Tailscale Serve  :443  -> complete control hub
 ```
 
@@ -31,6 +32,6 @@ enable it until the OAuth proxy rejects users outside the explicit allowlist.
 
 ## Repository collaboration
 
-There is no separate lab-access request. An approved collaborator inherits the
-basic authenticated landing page, while GitHub independently enforces access
+There is no separate lab-access request. An approved collaborator can enter the
+authenticated Raspberry Pi portal, while GitHub independently enforces access
 to each private repository. No workflow automatically invites applicants.

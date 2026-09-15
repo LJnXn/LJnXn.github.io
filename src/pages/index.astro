@@ -33,10 +33,10 @@ const labAccessUrl = import.meta.env.PUBLIC_LAB_ACCESS_URL;
     </div></section>
 
     <section class="band" id="access"><div class="shell private-band">
-      <div><div class="eyebrow">Controlled Access</div><h2>实验室入口</h2><p>Tailscale Funnel 只发布独立的受限入口。新用户提交合作者申请；批准后可使用 GitHub 登录并访问获邀项目。公开主页不会暴露控制中枢、NAS、Cockpit 或 WebDAV。</p></div>
+      <div><div class="eyebrow">Controlled Access</div><h2>实验室入口</h2><p>新用户提交合作者申请，由仓库所有者批准。白名单用户完成 GitHub 认证后直接进入树莓派控制中枢，可使用其中的 NAS、Cockpit、终端与实验室应用。</p></div>
       <div class="actions">
         <a class="button" href="https://github.com/LJnXn/LJnXn.github.io/issues/new?template=collaborator.yml" target="_blank" rel="noreferrer"><GitPullRequest size={17} /> 申请成为合作者</a>
-        {labAccessUrl ? <a class="button primary" href={labAccessUrl} rel="noreferrer"><LogIn size={17} /> 已批准用户登录</a> : <span class="button" aria-disabled="true"><LogIn size={17} /> 登录入口配置中</span>}
+        {labAccessUrl ? <a class="button primary" href={labAccessUrl} rel="noreferrer"><LogIn size={17} /> 登录并进入控制中枢</a> : <span class="button" aria-disabled="true"><LogIn size={17} /> 登录入口配置中</span>}
       </div>
     </div></section>
 

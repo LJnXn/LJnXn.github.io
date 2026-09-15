@@ -12,7 +12,8 @@ jobs:
   approve:
     if: >-
       github.event.label.name == 'approved' &&
-      contains(github.event.issue.labels.*.name, 'collaborator-request')
+      contains(github.event.issue.labels.*.name, 'collaborator-request') &&
+      github.actor == github.repository_owner
     runs-on: ubuntu-latest
     steps:
       - name: Update Raspberry Pi allowlist

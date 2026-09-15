@@ -12,7 +12,8 @@ jobs:
   approve:
     if: >-
       github.event.label.name == 'approved' &&
-      contains(github.event.issue.labels.*.name, 'access-request')
+      (contains(github.event.issue.labels.*.name, 'access-request') ||
+       contains(github.event.issue.labels.*.name, 'collaborator-request'))
     runs-on: ubuntu-latest
     steps:
       - name: Update Raspberry Pi allowlist
@@ -57,7 +58,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: issue.number,
-              body: `已批准 GitHub 用户 \`${username}\` 访问实验室合作者入口。`,
+              body: `已批准 GitHub 用户 \`${username}\` 访问实验室入口。合作者申请同时向下兼容基础只读访问。`,
             });
             await github.rest.issues.update({
               owner: context.repo.owner,

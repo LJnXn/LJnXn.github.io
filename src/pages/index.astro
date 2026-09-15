@@ -1,5 +1,5 @@
 ---
-import { ArrowRight, ExternalLink, GitPullRequest, LogIn, UserRoundCheck } from "@lucide/astro";
+import { ArrowRight, GitPullRequest, LogIn, UserRoundCheck } from "@lucide/astro";
 import { getCollection } from "astro:content";
 import Base from "../layouts/Base.astro";
 import GithubMark from "../components/GithubMark.astro";
@@ -7,9 +7,9 @@ import GithubMark from "../components/GithubMark.astro";
 const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort((a, b) => b.data.published.valueOf() - a.data.published.valueOf()).slice(0, 3);
 const labAccessUrl = import.meta.env.PUBLIC_LAB_ACCESS_URL;
 const projects = [
-  { name: "MyTinySTL", type: "C++", text: "以 C++11 实现一个紧凑的 STL，用于理解容器、迭代器和泛型设计。", url: "https://github.com/LJnXn/MyTinySTL" },
-  { name: "Tinyhttpd", type: "网络", text: "通过小型 HTTP Server 理解请求解析、CGI 与服务器程序的基本结构。", url: "https://github.com/LJnXn/Tinyhttpd" },
-  { name: "ISAC / Tiny NPU / Lab Hub", type: "整理中", text: "正在从私有工程中抽取不含凭据、实验数据和内网细节的可公开部分。" },
+  { name: "ISAC PL / PS / PC", type: "通信系统 · 整理中", text: "从私有工程中抽取可复现的构建方法、协议设计与非敏感实现。" },
+  { name: "Tiny NPU", type: "FPGA · 整理中", text: "整理 Zynq-7020 学习平台中适合公开的架构、RTL 与验证内容。" },
+  { name: "Raspberry Pi Lab Hub", type: "基础设施 · 整理中", text: "发布通用服务代码与部署方法，排除凭据、设备身份和内网配置。" },
 ];
 ---
 <Base>
@@ -29,7 +29,7 @@ const projects = [
 
     <section class="band" id="projects"><div class="shell">
       <div class="section-head"><div><div class="eyebrow">Selected Work</div><h2>正在构建</h2></div><p>项目不只是结果，也包括环境、约束、测量方式和可复现过程。</p></div>
-      <div class="project-grid">{projects.map((project) => project.url ? <a class="project" href={project.url} target="_blank" rel="noreferrer"><div class="meta">{project.type} <ExternalLink size={13} /></div><h3>{project.name}</h3><p>{project.text}</p></a> : <article class="project"><div class="meta">{project.type}</div><h3>{project.name}</h3><p>{project.text}</p></article>)}</div>
+      <div class="project-grid">{projects.map((project) => <article class="project"><div class="meta">{project.type}</div><h3>{project.name}</h3><p>{project.text}</p></article>)}</div>
     </div></section>
 
     <section class="band" id="writing"><div class="shell">

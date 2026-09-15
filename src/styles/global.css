@@ -57,6 +57,8 @@ section.band { padding-block: 80px; border-bottom: 1px solid var(--line); }
 .prose h2 { margin-top: 42px; font-size: 26px; }
 .prose code { color: var(--signal); }
 .prose a { color: var(--blue); }
+.comments { margin-top: 72px; padding-top: 32px; border-top: 1px solid var(--line); }
+.comments h2 { margin: 8px 0 24px; font-size: 26px; }
 .archive { padding-block: 72px 110px; min-height: calc(100vh - 140px); }
 .archive-intro { max-width: 660px; margin-bottom: 44px; }
 .archive-intro h1 { font-size: 58px; }
@@ -80,6 +82,7 @@ section.band { padding-block: 80px; border-bottom: 1px solid var(--line); }
   .hero-inner { padding-block: 80px 72px; }
   h1 { font-size: 48px; }
   .article h1 { font-size: 42px; }
+  .comments { margin-top: 54px; }
   .archive-intro h1 { font-size: 44px; }
   .archive-row { grid-template-columns: 1fr; gap: 8px; }
   .tags { justify-content: start; }
